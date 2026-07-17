@@ -1,0 +1,88 @@
+# =====================================================
+# ASTRA Intelligence Engine
+# Git Ignore
+# =====================================================
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+.venv/
+venv/
+env/
+
+# Environment Variables
+.env
+.env.local
+.env.*.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Python Cache
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# Build
+build/
+dist/
+*.egg-info/
+
+# Logs
+logs/
+*.log
+
+# Database
+*.sqlite3
+
+# Alembic
+alembic/versions/*.pyc
+
+# Docker
+docker-data/
+
+# Redis
+dump.rdb
+
+# PostgreSQL
+postgres-data/
+
+# MinIO
+minio-data/
+
+# OpenSearch
+opensearch-data/
+
+# Uploaded Files
+uploads/
+
+# Generated Reports
+reports/
+
+# Temporary Files
+tmp/
+temp/
+
+# Secrets
+secrets/
+*.pem
+*.key
+*.crt
+
+# Node (future frontend)
+node_modules/
+
+# Mac/Linux
+.Trashes

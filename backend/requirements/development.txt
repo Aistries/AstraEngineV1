@@ -1,0 +1,15 @@
+-r base.txt
+
+black
+
+ruff
+
+isort
+
+pytest
+
+pytest-asyncio
+
+coverage
+
+ipython

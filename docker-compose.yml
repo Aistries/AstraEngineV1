@@ -1,0 +1,167 @@
+version: "3.9"
+
+name: astra-intelligence-engine
+
+services:
+
+  backend:
+    container_name: astra-backend
+
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    env_file:
+      - ./backend/.env.example
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - ./backend:/app
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    command: >
+      uvicorn app.main:app
+      --host 0.0.0.0
+      --port 8000
+      --reload
+
+    networks:
+      - astra-network
+
+
+
+  worker:
+    container_name: astra-worker
+
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+
+    restart: unless-stopped
+
+    env_file:
+      - ./backend/.env.example
+
+    volumes:
+      - ./backend:/app
+
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+      redis:
+        condition: service_healthy
+
+    command: >
+      dramatiq
+      app.workers.main
+
+    networks:
+      - astra-network
+
+
+
+  postgres:
+    container_name: astra-postgres
+
+    image: postgres:17
+
+    restart: unless-stopped
+
+    environment:
+      POSTGRES_DB: astra
+      POSTGRES_USER: astra
+      POSTGRES_PASSWORD: astra_password
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U astra"]
+
+      interval: 10s
+
+      timeout: 5s
+
+      retries: 5
+
+    networks:
+      - astra-network
+
+
+
+  redis:
+    container_name: astra-redis
+
+    image: redis:8-alpine
+
+    restart: unless-stopped
+
+    ports:
+      - "6379:6379"
+
+    volumes:
+      - redis-data:/data
+
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+
+      interval: 10s
+
+      timeout: 5s
+
+      retries: 5
+
+    networks:
+      - astra-network
+
+
+
+# ===================================================
+# Future Services
+# Uncomment during later milestones
+# ===================================================
+
+# opensearch:
+#   image: opensearchproject/opensearch:latest
+
+# minio:
+#   image: minio/minio
+
+# prometheus:
+#   image: prom/prometheus
+
+# grafana:
+#   image: grafana/grafana
+
+# nginx:
+#   image: nginx:latest
+
+
+
+volumes:
+
+  postgres-data:
+
+  redis-data:
+
+
+
+networks:
+
+  astra-network:
+
+    driver: bridge
