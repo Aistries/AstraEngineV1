@@ -21,3 +21,11 @@ python-jose[cryptography]
 argon2-cffi
 
 prometheus-client
+
+passlib[bcrypt]
+
+bcrypt
+
+python-multipart
+
+email-validator

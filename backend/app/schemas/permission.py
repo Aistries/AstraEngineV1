@@ -1,20 +1,16 @@
 """
-Role schemas.
+Permission schemas.
 """
 
 from pydantic import BaseModel, ConfigDict
 
-from app.schemas.permission import PermissionResponse
 
-
-class RoleResponse(BaseModel):
+class PermissionResponse(BaseModel):
 
     id: int
 
     name: str
 
     description: str | None = None
-
-    permissions: list[PermissionResponse] = []
 
     model_config = ConfigDict(from_attributes=True)
